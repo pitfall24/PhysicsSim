@@ -1,6 +1,6 @@
-from math import sqrt, sin, cos, arctan
+from math import sqrt, sin, cos, atan
 
-GRAVITATION_CONSTANT = 6.6743e-11
+GRAVITATIONAL_CONSTANT = 6.6743e-11
 
 class Object:
   def __init__(self, posx, posy, mass, volume, static = False, name = None):
@@ -20,38 +20,45 @@ class Object:
     
     self.static = static
   
-  def setvel(newvelx, newvely):
+  def setvel(self, newvelx, newvely):
     self.velx = newvelx
     self.vely = newvely
     
-  def setpos(newposy, newposx):
+  def setpos(self, newposy, newposx):
     self.posy = newposy
     self.posx = newposx
   
-  def setacc(newaccx, newaccy):
+  def setacc(self, newaccx, newaccy):
     self.accx = newaccx
     self.accy = newaccy
   
-  def updatevel(accx, accy):
-    self.forcex = self.mass / self.accx
-    self.forcey = self.mass / self.accy
-    
+  def updatevel(self):
     self.velx += self.accx
     self.vely += self.accy
     
-  def updatepos():
-    if not self.static:
+  def updatepos(self):
+    if self.static == True:
       return
-    else:
-      self.posx += self.velx
-      self.posy += self.vely
     
-  def printinfo():
-    print('Name:', self.name)
-    print('Position (x, y): (' + str(self.posx) + ', ' + str(self.posy) + ')')
-    print('Velocity (x, y): (' + str(self.velx) + ', ' + str(self.vely) + ')')
-    print('Acceleration (x, y): (' + str(self.accx) + ', ' + str(self.accy) + ')')
-    print('Mass (kg):', self.mass + 'kg, Volume (m^3):', self.volume + 'm^3')
+    self.posx += self.velx
+    self.posy += self.vely
+    
+  def printinfo(self, information = ['all']):
+    for i in information:
+      if i == 'all':
+        print('Name:', self.name)
+        print('Position (x, y): (' + str(self.posx) + ', ' + str(self.posy) + ')')
+        print('Velocity (x, y): (' + str(self.velx) + ', ' + str(self.vely) + ')')
+        print('Acceleration (x, y): (' + str(self.accx) + ', ' + str(self.accy) + ')')
+        print('Mass (kg): ' + str(self.mass) + 'kg, Volume (m^3): ' + str(self.volume) + 'm^3\n')
+      elif i == 'pos':
+        print('Position (x, y): (' + str(self.posx) + ', ' + str(self.posy) + ')')
+      elif i == 'vel':
+        print('Velocity (x, y): (' + str(self.velx) + ', ' + str(self.vely) + ')')
+      elif i == 'acc':
+        print('Acceleration (x, y): (' + str(self.accx) + ', ' + str(self.accy) + ')')
+      elif i == 'mass':
+        print('Mass (kg): ' + str(self.mass) + 'kg')
 
 def calcattraction(object1, object2):
     relx = object1.posx - object2.posx
@@ -60,7 +67,10 @@ def calcattraction(object1, object2):
     
     distance = sqrt(relx ** 2 + rely ** 2)
     force = GRAVITATIONAL_CONSTANT * mass1 * mass2 / distance ** 2
-    angle = arctan(rely / relx)
+    try:
+      angle = atan(rely / relx)
+    except ZeroDivisionError:
+      angle = 0
     
     attractionx = cos(angle) * force
     attractiony = sin(angle) * force
