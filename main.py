@@ -4,7 +4,7 @@ from matplotlib.animation import FuncAnimation
 
 from driver import *
 
-firstObject = Object(0, 0, 10, 4, name = 'Test Object')
+firstObject = Object(0, 0, 10, 4, name = 'Test Object', fps = 12)
 
 x = []
 y = []
@@ -40,5 +40,5 @@ def animate(i):
     graph.set_data(x[:i+1], y[:i+1])
     return graph
 
-ani = FuncAnimation(fig, animate, frames=len(x), interval=200)
+ani = FuncAnimation(fig, animate, frames=len(x), interval=firstObject.dt)
 plt.show()

@@ -3,8 +3,10 @@ from math import sqrt, sin, cos, atan
 GRAVITATIONAL_CONSTANT = 6.6743e-11
 
 class Object:
-  def __init__(self, posx, posy, mass, volume, static = False, name = None):
+  def __init__(self, posx, posy, mass, volume, static = False, name = None, fps = 12):
     self.name = name
+    self.fps = fps
+    self.dt = 1 / fps
     
     self.posx = posx
     self.posy = posy
@@ -33,15 +35,15 @@ class Object:
     self.accy = newaccy
   
   def updatevel(self):
-    self.velx += self.accx
-    self.vely += self.accy
+    self.velx += self.accx * self.dt
+    self.vely += self.accy * self.dt
     
   def updatepos(self):
     if self.static == True:
       return
     
-    self.posx += self.velx
-    self.posy += self.vely
+    self.posx += self.velx * self.dt
+    self.posy += self.vely * self.dt
     
   def printinfo(self, information = ['all']):
     for i in information:
