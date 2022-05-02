@@ -62,6 +62,17 @@ class Object:
       elif i == 'mass':
         print('Mass (kg): ' + str(self.mass) + 'kg')
 
+class System:
+  def __init__(self, fps, name = None, **kwObjects):
+    self.fps = fps
+    self.name = name
+    
+    for name, Object in kwObjects:
+      self.name = Object
+      
+  def idk:
+    pass
+        
 def calcattraction(object1, object2):
     relx = object1.posx - object2.posx
     rely = object1.posy - object2.posy
