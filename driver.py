@@ -67,7 +67,7 @@ class System:
     self.fps = fps
     self.name = name
     
-    for name, Object in kwObjects:
+    for name, Object in kwObjects.items():
       self.name = Object
       
   def idk:
