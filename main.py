@@ -6,6 +6,7 @@ from driver import *
 
 firstObject = Object(0, 0, 10, 4, name = 'First Object', fps = 60)
 secondObject = Object(0, -1, 10, 4, name = 'Second Object', fps = 12)
+thirdObject = Object(0, -2, 10, 4, name = 'Third Object;, fps = 3)
 
 x = []
 y = []
@@ -17,6 +18,9 @@ firstObject.setacc(0, -9.81)
 
 secondObject.setvel(1, 8)
 secondObject.setacc(0, -9.81)
+                     
+thirdObject.setvel(1, 8)
+thirdObject.setacc(0, -9.81)
 
 x.append(firstObject.posx)
 y.append(firstObject.posy)
@@ -42,6 +46,19 @@ for _ in range(24):
 
 x.append(secondObject.posx)
 y.append(secondObject.posy)
+
+x.append(thirdObject.posx)
+y.append(thirdObject.posy)
+                     
+for _ in range(6):
+  thirdObject.updatevel()
+  thirdObject.updatepos()
+  for _ in range(20):
+    x.append(thirdObject.posx)
+    y.append(thirdObject.posy)
+                     
+ x.append(thirdObject.posx)
+ y.append(thirdObject.posy)
 
 
 fig = plt.figure()
