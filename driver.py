@@ -70,7 +70,7 @@ class System:
     for name, Object in kwObjects.items():
       self.name = Object
       
-  def idk:
+  def idk():
     pass
         
 def calcattraction(object1, object2):
