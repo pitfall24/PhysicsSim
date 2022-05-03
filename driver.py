@@ -65,13 +65,38 @@ class Object:
 class System:
   def __init__(self, fps, name = None, **kwObjects):
     self.fps = fps
+    self.dt = 1 / fps
     self.name = name
-    
-    for name, Object in kwObjects.items():
-      self.name = Object
+    self.objects = {name:object for name, object in kwObjects.items()}
       
-  def idk():
-    pass
+  def displayobjects(self):
+    for name, object in self.objects.items():
+      print('Name:', name, 'Object Name:', object.name)
+  
+  def updatepos(self):
+    for object in self.objects.values():
+      object.updatepos()
+  
+  def updatevel(self):
+    for object in self.objects.values():
+      object.updatevel()
+  
+  def setpos(self, newposx, newposy):
+    for object in self.objects.values():
+      object.setpos(newposx, newposy)
+  
+  def setvel(self, newvelx, newvely):
+    for object in self.objects.values():
+      object.setvel(newvelx, newvely)
+  
+  def setacc(self, newaccx, newaccy):
+    for object in self.objects.values():
+      object.setacc(newaccx, newaccy)
+      
+  def updateposvel(self):
+    for object in self.objects.values():
+      object.updatevel()
+      object.updatepos()
         
 def calcattraction(object1, object2):
     relx = object1.posx - object2.posx
