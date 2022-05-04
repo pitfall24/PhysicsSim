@@ -9,7 +9,7 @@ names = ['First Object', 'Second Object', 'Third Object', 'Fourth Object']
 location = [(0, 0), (0, -1), (0, -2), (0, -3)]
 objects = [Object(posx, posy, 0, 0, name = name, fps = GLOBAL_FPS) for (posx, posy), name in zip(location, names)]
   
-testSystem = System(GLOBAL_FPS, 'Test System', (object for object in objects))
+testSystem = System(GLOBAL_FPS, 'Test System', tuple(objects))
 
 testSystem.setacc(0, -9.8)
 testSystem.setvel(1, 8)
