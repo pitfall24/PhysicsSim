@@ -3,7 +3,7 @@ from math import sqrt, sin, cos, atan
 GRAVITATIONAL_CONSTANT = 6.6743e-11
 
 class Object:
-  def __init__(self, posx, posy, mass, volume, static = False, name = None, fps = 12):
+  def __init__(self, posx, posy, mass, volume, static = False, name = None, fps = 60):
     self.name = name
     self.fps = fps
     self.dt = 1 / fps
@@ -18,22 +18,13 @@ class Object:
     
     self.mass = mass
     self.volume = volume
-    self.density = mass / volume
+    try:
+      self.density = mass / volume
+    except ZeroDivisionError:
+      self.density = 0
     
     self.static = static
-  
-  def setvel(self, newvelx, newvely):
-    self.velx = newvelx
-    self.vely = newvely
     
-  def setpos(self, newposy, newposx):
-    self.posy = newposy
-    self.posx = newposx
-  
-  def setacc(self, newaccx, newaccy):
-    self.accx = newaccx
-    self.accy = newaccy
-  
   def updatevel(self):
     self.velx += self.accx * self.dt
     self.vely += self.accy * self.dt
@@ -44,6 +35,18 @@ class Object:
     
     self.posx += self.velx * self.dt
     self.posy += self.vely * self.dt
+  
+  def setpos(self, newposy, newposx):
+    self.posy = newposy
+    self.posx = newposx
+
+  def setvel(self, newvelx, newvely):
+    self.velx = newvelx
+    self.vely = newvely
+  
+  def setacc(self, newaccx, newaccy):
+    self.accx = newaccx
+    self.accy = newaccy
     
   def printinfo(self, information = ['all']):
     for i in information:
@@ -63,40 +66,64 @@ class Object:
         print('Mass (kg): ' + str(self.mass) + 'kg')
 
 class System:
-  def __init__(self, fps, name = None, **kwObjects):
+  def __init__(self, fps, systemname, *args):
     self.fps = fps
     self.dt = 1 / fps
-    self.name = name
-    self.objects = {name:object for name, object in kwObjects.items()}
+    self.systemname = systemname
+    self.objects = [object for object in args]
       
   def displayobjects(self):
-    for name, object in self.objects.items():
-      print('Name:', name, 'Object Name:', object.name)
+    for object in self.objects:
+      print('Name: "' + str(object.name) + '"')
   
   def updatepos(self):
-    for object in self.objects.values():
+    for object in self.objects:
       object.updatepos()
   
   def updatevel(self):
-    for object in self.objects.values():
+    for object in self.objects:
       object.updatevel()
   
-  def setpos(self, newposx, newposy):
-    for object in self.objects.values():
+  def setpos_all(self, newposx, newposy):
+    for object in self.objects:
+      object.setpos(newposx, newposy)
+
+  def setpos_list(self, newpos):
+    if len(self.objects) != len(newpos):
+      raise IndexError('Number of objects and new positions do not match')
+    
+    for object, (newposx, newposy) in zip(self.objects, newpos):
       object.setpos(newposx, newposy)
   
   def setvel(self, newvelx, newvely):
-    for object in self.objects.values():
+    for object in self.objects:
       object.setvel(newvelx, newvely)
   
   def setacc(self, newaccx, newaccy):
-    for object in self.objects.values():
+    for object in self.objects:
       object.setacc(newaccx, newaccy)
       
   def updateposvel(self):
-    for object in self.objects.values():
+    for object in self.objects:
       object.updatevel()
       object.updatepos()
+
+  def setstatic(self, static):
+    for object in self.objects:
+      object.static = static
+
+  def setmass(self, newmass):
+    for object in self.objects:
+      object.mass = newmass
+  
+  def setvolume(self, newvolume):
+    for object in self.objects:
+      object.volume = newvolume
+
+  def updatedensity(self):
+    for object in self.objects:
+      newdensity = object.mass / object.volume
+      object.density = newdensity
         
 def calcattraction(object1, object2):
     relx = object1.posx - object2.posx
