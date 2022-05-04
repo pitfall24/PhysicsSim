@@ -5,17 +5,18 @@ from driver import *
 
 GLOBAL_FPS = 60
 
-firstObject = Object(0, 0, 0, 0, name = 'First Object', fps = GLOBAL_FPS)
-secondObject = Object(0, 0, 0, 0, name = 'Second Object', fps = GLOBAL_FPS)
-thirdObject = Object(0, 0, 0, 0, name = 'Third Object', fps = GLOBAL_FPS)
-fourthObject = Object(0, 0, 0, 0, name = 'Fourth Object', fps = GLOBAL_FPS)
-
-testSystem = System(GLOBAL_FPS, 'Test System', firstObject, secondObject, thirdObject, fourthObject)
+names = ['First Object', 'Second Object', 'Third Object', 'Fourth Object']
+location = [(0, 0), (0, -1), (0, -2), (0, -3)]
+objects = [Object(posx, posy, 0, 0, name = name, fps = GLOBAL_FPS) for (posx, posy), name in zip(location, names)]
+  
+testSystem = System(GLOBAL_FPS, 'Test System', (object for object in objects))
 
 testSystem.setacc(0, -9.8)
 testSystem.setvel(1, 8)
 testSystem.setpos_list([(0, 0), (0, -1), (0, -2), (0, -3)])
 
+for _ in range(60):
+  testSystem.updateposvel()
 '''objects = [firstObject, secondObject, thirdObject, fourthObject]
 information_needed = ['pos']
 coords = []
