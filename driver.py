@@ -36,9 +36,9 @@ class Object:
     self.posx += self.velx * self.dt
     self.posy += self.vely * self.dt
   
-  def setpos(self, newposy, newposx):
-    self.posy = newposy
+  def setpos(self, newposx, newposy):
     self.posx = newposx
+    self.posy = newposy
 
   def setvel(self, newvelx, newvely):
     self.velx = newvelx
@@ -47,7 +47,10 @@ class Object:
   def setacc(self, newaccx, newaccy):
     self.accx = newaccx
     self.accy = newaccy
-    
+  
+  def returnpos(self):
+    return (self.posx, self.posy)
+
   def printinfo(self, information = ['all']):
     for i in information:
       if i == 'all':
@@ -75,6 +78,14 @@ class System:
   def displayobjects(self):
     for object in self.objects:
       print('Name: "' + str(object.name) + '"')
+
+  def returninfo(self):
+    coords = []
+
+    for object in self.objects:
+      coords.append(object.returnpos())
+
+    return coords
   
   def updatepos(self):
     for object in self.objects:
@@ -88,20 +99,40 @@ class System:
     for object in self.objects:
       object.setpos(newposx, newposy)
 
-  def setpos_list(self, newpos):
-    if len(self.objects) != len(newpos):
+  def setpos_list(self, newposx, newposy):
+    if len(self.objects) != (len(newposx) or len(newposy)):
       raise IndexError('Number of objects and new positions do not match')
+    if len(newposx) != len(newposy):
+      raise IndexError('Number of x and y positions do not match')
     
-    for object, (newposx, newposy) in zip(self.objects, newpos):
-      object.setpos(newposx, newposy)
+    for object, posx, posy in zip(self.objects, newposx, newposy):
+      object.setpos(posx, posy)
   
-  def setvel(self, newvelx, newvely):
+  def setvel_all(self, newvelx, newvely):
     for object in self.objects:
       object.setvel(newvelx, newvely)
+
+  def setvel_list(self, newvelx, newvely):
+    if len(self.objects) != (len(newvelx) or len(newvely)):
+      raise IndexError('Number of objects and new velocities do not match')
+    if len(newvelx) != len(newvely):
+      raise IndexError('Number of x and y velocities do not match')
+    
+    for object, velx, vely in zip(self.objects, newvelx, newvely):
+      object.setvel(velx, vely)
   
-  def setacc(self, newaccx, newaccy):
+  def setacc_all(self, newaccx, newaccy):
     for object in self.objects:
       object.setacc(newaccx, newaccy)
+
+  def setacc_list(self, newaccx, newaccy):
+    if len(self.objects) != (len(newaccx) or len(newaccy)):
+      raise IndexError('Number of objects and new accelerations do not match')
+    if len(newaccx) != len(newaccy):
+      raise IndexError('Number of x and y accelerations do not match')
+    
+    for object, accx, accy in zip(self.objects, newaccx, newaccy):
+      object.setacc(accx, accy)
       
   def updateposvel(self):
     for object in self.objects:
