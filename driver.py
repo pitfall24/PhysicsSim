@@ -134,7 +134,7 @@ class System:
     for object, accx, accy in zip(self.objects, newaccx, newaccy):
       object.setacc(accx, accy)
       
-  def updateposvel(self):
+  def updateposandvel(self):
     for object in self.objects:
       object.updatevel()
       object.updatepos()

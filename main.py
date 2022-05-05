@@ -1,4 +1,3 @@
-from cgi import test
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 
@@ -20,7 +19,7 @@ testSystem.setpos_list([0, 0, 0, 0], [0, -1, -2, -3])
 coords = []
 
 while testSystem.objects[0].posy > -3:
-  testSystem.updateposvel()
+  testSystem.updateposandvel()
   coords += testSystem.returninfo()
 
 fig = plt.figure()
