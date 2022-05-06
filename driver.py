@@ -73,7 +73,8 @@ class System:
     self.fps = fps
     self.dt = 1 / fps
     self.systemname = systemname
-    self.objects = [object for object in args]
+    self.objects = [object if not object.static for object in args]
+    self.static_objects = [object if object.static for object in args]
       
   def displayobjects(self):
     for object in self.objects:
@@ -155,6 +156,28 @@ class System:
     for object in self.objects:
       newdensity = object.mass / object.volume
       object.density = newdensity
+      
+  def calcacc(self):
+    attraction = {}
+    sumx = []
+    sumy = []
+    
+    for object in self.objects:
+      for test in self.objects:
+        if object == test:
+          continue
+        else:
+          x, y = calcattraction(object, test)
+          sumx.append(x)
+          sumy.append(y)
+      
+      avgx = sum(sumx) / len(sumx)
+      avgy = sum(sumy) / len(sumy)
+      attraction[object] = forcetoacc(object.mass, avgx, avgy)
+      sumx.clear()
+      sumy.clear()
+      
+    return attraction
         
 def calcattraction(object1, object2):
     relx = object1.posx - object2.posx
