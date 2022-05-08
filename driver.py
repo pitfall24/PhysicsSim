@@ -1,4 +1,4 @@
-from math import sqrt, sin, cos, atan
+from math import sqrt, sin, cos, atan, pi
 
 GRAVITATIONAL_CONSTANT = 6.6743e-11
 
@@ -22,12 +22,9 @@ class Object:
       self.density = mass / volume
     except ZeroDivisionError:
       self.density = 0
+    self.radius = sqrt(volume / pi)
     
     self.static = static
-    
-  def updatevel(self):
-    self.velx += self.accx * self.dt
-    self.vely += self.accy * self.dt
     
   def updatepos(self):
     if self.static == True:
@@ -35,6 +32,13 @@ class Object:
     
     self.posx += self.velx * self.dt
     self.posy += self.vely * self.dt
+
+  def updatevel(self):
+    self.velx += self.accx * self.dt
+    self.vely += self.accy * self.dt
+
+  def updateradius(self):
+    self.radius = sqrt(self.volume / pi)
   
   def setpos(self, newposx, newposy):
     self.posx = newposx
@@ -50,6 +54,12 @@ class Object:
   
   def returnpos(self):
     return (self.posx, self.posy)
+
+  def returnvel(self):
+    return (self.velx, self.vely)
+
+  def returnacc(self):
+    return (self.accx, self.accy)
 
   def printinfo(self, information = ['all']):
     for i in information:
@@ -73,8 +83,9 @@ class System:
     self.fps = fps
     self.dt = 1 / fps
     self.systemname = systemname
-    self.objects = [object if not object.static for object in args]
-    self.static_objects = [object if object.static for object in args]
+    self.objects = [object for object in args if not object.static]
+    self.static_objects = [object for object in args if object.static]
+    self.length = len(args)
       
   def displayobjects(self):
     for object in self.objects:
@@ -156,6 +167,10 @@ class System:
     for object in self.objects:
       newdensity = object.mass / object.volume
       object.density = newdensity
+
+  def updateradius(self):
+    for object in self.objects:
+      object.updateradius()
       
   def calcacc(self):
     attraction = {}
