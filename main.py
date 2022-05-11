@@ -2,9 +2,6 @@ import pygame
 from driver import *
 #import pyautogui as pag
 
-import matplotlib.pyplot as plt
-from matplotlib.animation import FuncAnimation
-
 GLOBAL_FPS = 60
 
 firstObject = Object(0, 0, 0, 0, name = 'First Object', fps = GLOBAL_FPS)
@@ -120,26 +117,3 @@ while running:
   
   pygame.display.flip()
 pygame.quit()
-
-'''
-while len(coords) < GLOBAL_FPS * testSystem.length * runtime:
-  testSystem.updateposandvel()
-  coords += testSystem.returninfo()
-'''
-
-'''
-fig = plt.figure()
-plt.xlim(0, 5)
-plt.ylim(-5, 10)
-graph, = plt.plot([], [], 'b.')
-
-x = [i for i, j in coords]
-y = [j for i, j in coords]
-
-def animate(i):
-    graph.set_data(x[:i+1], y[:i+1])
-    return graph
-
-ani = FuncAnimation(fig, animate, frames = len(coords), interval = 1000 / (GLOBAL_FPS * testSystem.length))
-plt.show()
-'''
