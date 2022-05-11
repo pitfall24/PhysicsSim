@@ -1,4 +1,5 @@
 import pygame
+from color import *
 from driver import *
 #import pyautogui as pag
 
@@ -35,84 +36,53 @@ pygame.display.set_caption('Test')
 SCREEN_WIDTH, SCREEN_HEIGHT = 1920, 1080
 mouseX, mouseY = SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2
 zoomX, zoomY = 2, 2
-DISPLAY_WIDTH, DISPLAY_HEIGHT = SCREEN_WIDTH // zoomX, SCREEN_HEIGHT // zoomY
-
-BACKGROUND_COLOR1 = (0, 0, 0)         # Black
-BACKGROUND_COLOR2 = (255, 255, 255)   # White
-
-OBJECT_COLOR1 = (15, 60, 255)         # Blueish ig?
+DISPLAY_WIDTH, DISPLAY_HEIGHT = SCREEN_WIDTH, SCREEN_HEIGHT
+SCALED_WIDTH, SCALED_HEIGHT = DISPLAY_WIDTH // zoomX, DISPLAY_HEIGHT // zoomY
 
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 display = pygame.Surface((DISPLAY_WIDTH, DISPLAY_HEIGHT))
+scaled = pygame.transform(display, (DISPLAY_WIDTH // zoomx, DISPLAY_HEIGHT // zoomy))
 clock = pygame.time.Clock()
-
-while len(coords) < GLOBAL_FPS * testSystem.length * runtime:
-  testSystem.updateposandvel()
-  coords += testSystem.returninfo()
 
 running = True
 while running:
+  # Event Handling
   for event in pygame.event.get():
-    #print(event)
+    # Quit Game
     if event.type == pygame.QUIT:
       running = False
+    # Check for click and scroll
     if event.type == pygame.MOUSEBUTTONDOWN:
       if event.button == 1:
         mouseX, mouseY = event.pos
       if event.button == 4:
         zoomX += 0.5
         zoomY += 0.5
-        print(zoomX, zoomY)
       if event.button == 5:
-        if zoomX and zoomY > 0.3:
-          zoomX -= 0.2
-          zoomY -= 0.2
-        elif zoomX or zoomY == 0.1:
-          pass
+        if zoomX and zoomY > 0.6:
+          zoomX -= 0.5
+          zoomY -= 0.5
         else:
           zoomX = 0.1
           zoomY = 0.1
-        print(zoomX, zoomY)
-      DISPLAY_WIDTH, DISPLAY_HEIGHT = SCREEN_WIDTH // zoomX, SCREEN_HEIGHT // zoomY
-      display = pygame.Surface((DISPLAY_WIDTH, DISPLAY_HEIGHT))
+    # Check for drag
     if event.type == pygame.MOUSEMOTION and event.buttons[0]:
         mouseX, mouseY = event.pos
   
-  display.fill(BACKGROUND_COLOR2)
-  pygame.draw.line(display, BACKGROUND_COLOR1, (0, DISPLAY_HEIGHT - 50), (DISPLAY_WIDTH, DISPLAY_HEIGHT - 50))
-
-  num_objects = testSystem.length
-
-  length = len(coords)
-  frames = length // 10
-
-  for i in range(10):
-    try:
-      pygame.draw.circle(display, OBJECT_COLOR1, (coords[i + counter * 10][0], DISPLAY_HEIGHT - coords[i + counter * 10][1]), firstObject.radius)
-    except IndexError:
-      counter = 1
-
-  '''
+  # Calculate coordinates
+  coords = {}
+  testSystem.updateposandvel()
+  for object in testSystem.object:
+    if object.posy <= 50:
+      object.posy = 50
+      object.vely = 0
+      object.accy = 0
   for object in testSystem.objects:
-    if object.posy < 50:
-      object.setpos(object.posx, 50)
-      object.setvel(0, 0)
-      accx = 0
-      accy = 0
-      object.setacc(accx, accy)
-
-    x, y = object.returnpos()
-    y = SCREEN_HEIGHT - y
-    
-    print(object.returnpos(), object.returnvel(), object.returnacc())
-    pygame.draw.circle(screen, (0, 0, 255), (x, y), object.radius)
-  '''
-
-  #testSystem.updateposandvel()
-  counter += 1
+    coords{object.name} = [[object.posx, object.posy], object.radius]
+  
   clock.tick(GLOBAL_FPS)
   
-  screen.fill(BACKGROUND_COLOR1)
+  screen.fill(COLOR8)
   screen.blit(display, (mouseX - DISPLAY_WIDTH // 2, mouseY - DISPLAY_HEIGHT // 2))
   
   pygame.display.flip()
