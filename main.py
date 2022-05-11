@@ -5,6 +5,7 @@ from driver import *
 
 GLOBAL_FPS = 60
 
+# Set up testSystem
 firstObject = Object(0, 0, 0, 0, name = 'First Object', fps = GLOBAL_FPS)
 secondObject = Object(0, 0, 0, 0, name = 'Second Object', fps = GLOBAL_FPS)
 thirdObject = Object(0, 0, 0, 0, name = 'Third Object', fps = GLOBAL_FPS)
@@ -26,23 +27,21 @@ testSystem.setmass(3)
 testSystem.setvolume(36)
 testSystem.updateradius()
 
-coords = []
-counter = 1
-runtime = 5
-
+# Start PyGame
 pygame.init()
 pygame.display.set_caption('Test')
+clock = pygame.time.Clock()
 
+# Creating screens and surfaces
 SCREEN_WIDTH, SCREEN_HEIGHT = 1920, 1080
-mouseX, mouseY = SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2
 zoomX, zoomY = 2, 2
-DISPLAY_WIDTH, DISPLAY_HEIGHT = SCREEN_WIDTH, SCREEN_HEIGHT
-SCALED_WIDTH, SCALED_HEIGHT = DISPLAY_WIDTH // zoomX, DISPLAY_HEIGHT // zoomY
+mouseX, mouseY = SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2
+DISPLAY_WIDTH, DISPLAY_HEIGHT = SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2
+SCALED_WIDTH, SCALED_HEIGHT = DISPLAY_WIDTH, DISPLAY_HEIGHT
 
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 display = pygame.Surface((DISPLAY_WIDTH, DISPLAY_HEIGHT))
-scaled = pygame.transform(display, (DISPLAY_WIDTH // zoomx, DISPLAY_HEIGHT // zoomy))
-clock = pygame.time.Clock()
+scaled = pygame.transform.scale(display, (SCALED_WIDTH, SCALED_HEIGHT))
 
 running = True
 while running:
@@ -69,21 +68,33 @@ while running:
     if event.type == pygame.MOUSEMOTION and event.buttons[0]:
         mouseX, mouseY = event.pos
   
-  # Calculate coordinates
-  coords = {}
+  # Make Surfaces correct sizes
+  DISPLAY_WIDTH //= zoomX
+  DISPLAY_HEIGHT //= zoomY
+  display = pygame.Surface((DISPLAY_WIDTH, DISPLAY_HEIGHT))
+  
+  # Calculate physics
   testSystem.updateposandvel()
   for object in testSystem.object:
     if object.posy <= 50:
       object.posy = 50
       object.vely = 0
       object.accy = 0
+  
+  # Add object coordinates to scaled
+  coords = {}
   for object in testSystem.objects:
-    coords{object.name} = [[object.posx, object.posy], object.radius]
+    coords{object.name} = [object.posx, object.posy, object.radius]
+  for posx, posy, radius in coords.values():
+    pygame.draw.circle(scaled, COLOR17, (posx, posy, radius))
+  coords.clear()
   
-  clock.tick(GLOBAL_FPS)
-  
+  # Transform scaled to display resolution and blit upwards
+  scaled = pygame.transform.scale(scaled, (DISPLAY_WIDTH, DISPLAY_height))
+  display.blit(scaled, (0, 0))
   screen.fill(COLOR8)
   screen.blit(display, (mouseX - DISPLAY_WIDTH // 2, mouseY - DISPLAY_HEIGHT // 2))
   
+  clock.tick(GLOBAL_FPS)
   pygame.display.flip()
 pygame.quit()
