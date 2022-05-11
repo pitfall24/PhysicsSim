@@ -1,0 +1,17 @@
+COLOR1  = (255, 0,   0  )         # Red
+COLOR2  = (255, 169, 0  )         # Orange
+COLOR3  = (255, 255, 0  )         # Yellow
+COLOR4  = (0,   255, 0  )         # Green
+COLOR5  = (0,   0,   255)         # Blue
+COLOR6  = (230, 230, 250)         # Light Blue
+COLOR7  = (128, 128, 128)         # Grey
+COLOR8  = (0,   0,   0  )         # Black
+COLOR9  = (255, 255, 255)         # White
+COLOR10 = (0,   102, 51 )         # Forest Green
+COLOR11 = (0,   0,   102)         # Deep Blue
+COLOR12 = (255, 204, 153)         # Peach
+COLOR13 = (204, 255, 153)         # Light Lime
+COLOR14 = (153, 0,   76 )         # Maroon
+COLOR15 = (102, 51,  0  )         # Brown
+COLOR16 = (204, 153, 255)         # Lavender
+COLOR17 = (0,   102, 102)         # Teal
