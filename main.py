@@ -55,27 +55,31 @@ while running:
       if event.button == 1:
         mouseX, mouseY = event.pos
       if event.button == 4:
-        zoomX += 0.5
-        zoomY += 0.5
+        zoomX += 0.25
+        zoomY += 0.25
+        DISPLAY_WIDTH *= zoomX
+        DISPLAY_HEIGHT *= zoomY
       if event.button == 5:
-        if zoomX and zoomY > 0.6:
-          zoomX -= 0.5
-          zoomY -= 0.5
+        if zoomX and zoomY > 0.15:
+          zoomX -= 0.1
+          zoomY -= 0.1
         else:
-          zoomX = 0.1
-          zoomY = 0.1
+          zoomX = 0.05
+          zoomY = 0.05
+        DISPLAY_WIDTH //= zoomX
+        DISPLAY_HEIGHT //= zoomY
     # Check for drag
     if event.type == pygame.MOUSEMOTION and event.buttons[0]:
         mouseX, mouseY = event.pos
-  
+  print(zoomX, zoomY)
   # Make Surfaces correct sizes
-  DISPLAY_WIDTH //= zoomX
-  DISPLAY_HEIGHT //= zoomY
   display = pygame.Surface((DISPLAY_WIDTH, DISPLAY_HEIGHT))
-  
+  display.fill(COLOR9)
+  scaled.fill(COLOR9)
+
   # Calculate physics
   testSystem.updateposandvel()
-  for object in testSystem.object:
+  for object in testSystem.objects:
     if object.posy <= 50:
       object.posy = 50
       object.vely = 0
@@ -84,14 +88,14 @@ while running:
   # Add object coordinates to scaled
   coords = {}
   for object in testSystem.objects:
-    coords{object.name} = [object.posx, object.posy, object.radius]
+    coords[object.name] = [object.posx, object.posy, object.radius]
   for posx, posy, radius in coords.values():
-    pygame.draw.circle(scaled, COLOR17, (posx, posy, radius))
+    pygame.draw.circle(scaled, COLOR17, (posx, posy), radius)
   coords.clear()
   
   # Transform scaled to display resolution and blit upwards
-  scaled = pygame.transform.scale(scaled, (DISPLAY_WIDTH, DISPLAY_height))
-  display.blit(scaled, (0, 0))
+  scaled = pygame.transform.scale(scaled, (DISPLAY_WIDTH, DISPLAY_HEIGHT))
+  display.blit(scaled, (DISPLAY_WIDTH // 2, DISPLAY_HEIGHT // 2))
   screen.fill(COLOR8)
   screen.blit(display, (mouseX - DISPLAY_WIDTH // 2, mouseY - DISPLAY_HEIGHT // 2))
   
