@@ -90,7 +90,7 @@ while running:
   for object in testSystem.objects:
     coords[object.name] = [object.posx, object.posy, object.radius]
   for posx, posy, radius in coords.values():
-    pygame.draw.circle(scaled, COLOR17, (posx, posy), radius)
+    pygame.draw.circle(scaled, COLOR17, (posx, SCALED_HEIGHT // 2 - posy), radius)
   coords.clear()
   
   # Transform scaled to display resolution and blit upwards
